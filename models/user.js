@@ -1,5 +1,7 @@
-const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost:27017/pantryDB", {useNewUrlParser: true});
+const path = require("path");
+const dao = require(path.join(__dirname, "../dao/mongoose"));
+
+const mongoose = dao.conn;
 
 const userSchema = new mongoose.Schema({
   login: String,

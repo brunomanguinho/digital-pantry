@@ -20,20 +20,24 @@ app.post("/", (req, res) => {
   const userName = req.body.username;
   const password = req.body.password;
 
-  userDAO.findUser(userName, password, (foundUser)=>{
+  userDAO.findUser(userName, (foundUser)=>{
     console.log(foundUser);
     if (foundUser === null){
-      console.log("user not found");
+      console.log("user not found...registering...");
+
+      userDAO.registerUser(userName, password, (user)=>{
+        if (user !== null){
+          res.render("pantries", {user: user.login})
+        }
+      });
     } else {
       userDAO.loginSuccess(foundUser, password, (success)=>{
         if (success){
-          res.render("pantries", {user: userName});
+          res.render("pantries", {user: foundUser.login});
         } else {console.log("Invalid password");}
       })
     }
-
   });
-
 });
 
 app.listen(3000, () => {

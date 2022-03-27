@@ -1,28 +1,37 @@
 const bcrypt = require("bcrypt");
 const path = require("path");
-
 const model = require(path.join(__dirname, "../models/user"));
+const saltRounds = 10;
 
 let User = model.User;
 
 exports.findUser =
- function (userName, password, fn){
+ function (userName, fn){
   User.findOne({login: userName}, (err, foundUser) => {
     if (err){
       console.log(err);
     }
-    // }else{
-    //   if (foundUser){
-    //     bcrypt.compare(password, foundUser.password, (err, result)=>{
-    //       if (result === true){
-    //         res.render("pantries", {user: userName});
-    //       }
-    //     });
-    //   }
-    // }
     fn(foundUser);
   });
 }
+
+exports.registerUser =
+  function (_userName, _password, fn){
+    bcrypt.hash(_password, saltRounds, (err, hash)=>{
+      if (err){
+        console.log(err);
+      } else {
+        const user = new User({
+          login: _userName,
+          password: hash
+        });
+
+        user.save();
+
+        fn(user);
+      }
+    })
+  }
 
 exports.loginSuccess =
 function (user, password, fn){
