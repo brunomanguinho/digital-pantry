@@ -6,7 +6,6 @@ const session = require("express-session");
 const passport = require("passport");
 
 const app = express();
-let loggedUser = null;
 
 app.set("view engine", "ejs");
 
@@ -44,7 +43,6 @@ app.post("/", (req, res) => {
           res.redirect("/");
         } else {
           passport.authenticate("local")(req, res, ()=>{
-            loggedUser = user;
             res.redirect("/pantries")
           })
         }
@@ -61,8 +59,6 @@ app.post("/", (req, res) => {
         if (err){
           console.log(err);
         } else{
-          loggedUser = user;
-          console.log(loggedUser);
           passport.authenticate("local")(req, res, ()=>{
             res.redirect("/pantries");
           })
@@ -74,8 +70,8 @@ app.post("/", (req, res) => {
 
 app.get("/pantries", (req, res)=>{
   if (req.isAuthenticated()){
-    console.log(loggedUser);
-    res.render("pantries", {user: loggedUser.username});
+    console.log(req.user.username);
+    res.render("pantries", {user: req.user.username});
   }else {
     res.redirect("/");
   }
