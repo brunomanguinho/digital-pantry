@@ -10,4 +10,4 @@ const pantrySchema = new mongoose.Schema({
   user_id: User
 });
 
-export.Pantry = new mongoose.Model("Pantry", pantrySchema);
+modeule.exports = new mongoose.Model("Pantry", pantrySchema);

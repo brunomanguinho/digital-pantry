@@ -1,52 +1,84 @@
-var User = require(__dirname + "/models/user");
+let User = require(__dirname + "/models/user");
 const userDAO = require(__dirname + "/dao/userDAO")
 const express = require("express");
 const bodyParser = require("body-parser");
+const session = require("express-session");
+const passport = require("passport");
+
 const app = express();
-const bcrypt = require("bcrypt");
-const saltRounds = 10;
-var isUserLoggedIn = false;
+let loggedUser = null;
 
 app.set("view engine", "ejs");
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
+app.use(session({
+  secret: "thisisthefirsttimeauthenticantingbyusingsessions",
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.get("/", (req, res) => {
   res.render("index");
 });
 
 app.post("/", (req, res) => {
-  const userName = req.body.username;
-  const password = req.body.password;
+  const _userName = req.body.username;
+  const _password = req.body.password;
 
-  userDAO.findUser(userName, (foundUser)=>{
+  userDAO.findUser(_userName, (foundUser)=>{
     if (foundUser === null){
       console.log("user not found...registering...");
 
-      userDAO.registerUser(userName, password, (user)=>{
-        if (user !== null){
-          isUserLoggedIn = true;
-          res.render("pantries", {user: user.login})
+      User.register({username: _userName}, _password, (err, user)=>{
+        if (err){
+          console.log(err);
+          res.redirect("/");
+        } else {
+          passport.authenticate("local")(req, res, ()=>{
+            loggedUser = user;
+            res.redirect("/pantries")
+          })
         }
+
       });
     } else {
-      userDAO.loginSuccess(foundUser, password, (success)=>{
-        if (success){
-          //res.render("pantries", {user: foundUser.login});
-          User = foundUser;
-          isUserLoggedIn = true;
-          res.redirect("/pantries");
-        } else {console.log("Invalid password");}
+      console.log("trying to log in...");
+      const user = new User({
+        username: _userName,
+        password: _password
+      });
+
+      req.login(user, (err)=>{
+        if (err){
+          console.log(err);
+        } else{
+          loggedUser = user;
+          console.log(loggedUser);
+          passport.authenticate("local")(req, res, ()=>{
+            res.redirect("/pantries");
+          })
+        }
       })
     }
   });
 });
 
 app.get("/pantries", (req, res)=>{
-  if (!isUserLoggedIn){
-    res.redirect("/")
-  }else res.render("pantries", {user: User.login});
+  if (req.isAuthenticated()){
+    console.log(loggedUser);
+    res.render("pantries", {user: loggedUser.username});
+  }else {
+    res.redirect("/");
+  }
 })
 
 app.listen(3000, () => {

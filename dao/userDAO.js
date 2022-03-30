@@ -1,13 +1,11 @@
 const bcrypt = require("bcrypt");
 const path = require("path");
-const model = require(path.join(__dirname, "../models/user"));
+const User = require(path.join(__dirname, "../models/user"));
 const saltRounds = 10;
-
-let User = model.User;
 
 exports.findUser =
  function (userName, fn){
-  User.findOne({login: userName}, (err, foundUser) => {
+  User.findOne({username: userName}, (err, foundUser) => {
     if (err){
       console.log(err);
     }
@@ -22,7 +20,7 @@ exports.registerUser =
         console.log(err);
       } else {
         const user = new User({
-          login: _userName,
+          username: _userName,
           password: hash
         });
 
