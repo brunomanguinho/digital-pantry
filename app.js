@@ -26,7 +26,10 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.get("/", (req, res) => {
-  res.render("index");
+  console.log(req.user)
+  if (req.isAuthenticated()){
+    res.redirect("/pantries");
+  }else res.render("index");
 });
 
 app.post("/", (req, res) => {
@@ -59,7 +62,7 @@ app.post("/", (req, res) => {
         if (err){
           console.log(err);
         } else{
-          passport.authenticate("local")(req, res, ()=>{
+          passport.authenticate("local")(req, res, () => {
             res.redirect("/pantries");
           })
         }
@@ -70,11 +73,16 @@ app.post("/", (req, res) => {
 
 app.get("/pantries", (req, res)=>{
   if (req.isAuthenticated()){
-    console.log(req.user.username);
-    res.render("pantries", {user: req.user.username});
-  }else {
+    if (req.user.pantries.length === 0){
+      userDAO.insertDefaultPantries(req.user, items=>{
+          res.render("pantries", {user: req.user.username, pantries: items});
+      });
+    } else{
+      res.render("pantries", {user: req.user.username, pantries: req.user.pantries});
+    }
+  } else {
     res.redirect("/");
-  }
+   }
 })
 
 app.listen(3000, () => {
