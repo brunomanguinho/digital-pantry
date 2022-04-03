@@ -44,31 +44,32 @@ body {
   border-top-right-radius: 0;
 }
 
-
-
 .navbar-light .navbar-brand {
     color: #FFF;
     padding-left: 10%;
     font-family: 'Montserrat', sans-serif;
 }
 
-/*
-.form-signin {
-  width: 100%;
-  max-width: 330px;
-  padding: 15px;
-  margin: auto;
+.pantries{
+  margin: 5% 10%;
 }
 
-.top {
-  margin-bottom: -1px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
+.pitem{
+  margin-bottom: 20px;
 }
 
-.bottom {
-  margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+.pantry{
+  background-color: #FAFFAF;
+  height: 192px;
+  border-radius: 10%;
+  box-shadow: 10px 10px #E2DEA9;
 }
-*/
+
+.info-image{
+  width: 96px;
+}
+
+.btn-pantry{
+  background-color: transparent;
+  border: 0px;
+}

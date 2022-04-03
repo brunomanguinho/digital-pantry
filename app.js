@@ -4,6 +4,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const passport = require("passport");
+const _ = require("lodash");
 
 const app = express();
 
@@ -83,7 +84,22 @@ app.get("/pantries", (req, res)=>{
   } else {
     res.redirect("/");
    }
-})
+});
+
+// app.post("/pantries", (req, res)=>{
+//   console.log(req.body);
+//   res.redirect("/pantries/"+req.body.pantryButton);
+// });
+
+app.get("/pantries/:list_name", (req, res)=>{
+  console.log(req.query);
+  const list = {
+    name: req.query.pantryButton,
+    description: req.query.description,
+    id: req.query.listID
+  }
+  res.render("items", {pantry: list});
+});
 
 app.listen(3000, () => {
   console.log("Server is listening on port 3000...");

@@ -2,12 +2,33 @@
 
 <h1>Welcome <%= user %> </h1>
 
-<ul>
-    <% pantries.forEach(items=>{ %>
-      <li>
-        <%= items.name + " - " + items.description; %>
-      </li>
-    <%});%>
-</ul>
+<div class="row pantries">
+  <% pantries.forEach( pantry =>{ %>
+      <div class="col-lg-3 col-md-6 pitem">
+        <form class="" action="pantries/<%=pantry.name%>" method="get">
+          <button type="submit" name="pantryButton" value="<%=pantry.name%>"
+            class="btn-pantry">
+            <div class="pantry">
+              <h3><%= pantry.name %></h3>
+              <img src="<%=pantry.image%>" alt="info-image" class="info-image">
+              <p name="description"><%= pantry.description %></p>
+
+              <input type="hidden" name="description" value="<%= pantry.description %>">
+              <input type="hidden" name="listID" value="<%= pantry._id %>">
+            </div>
+          </button>
+        </form>
+      </div>
+
+  <%});%>
+
+  <!-- <div class="col-lg-3 col-md-6 pitem">
+      <div class="pantry">
+        <h3>Custom</h3>
+        <img src="images/pantry.png" alt="info-image" class="info-image">
+        <p>Create your own list...</p>
+      </div>
+  </div> -->
+</div>
 
 <%- include("footer") -%>

@@ -5,7 +5,8 @@ const mongoose = dao.conn;
 
 const pantrySchema = new mongoose.Schema({
   name: String,
-  description: String
+  description: String,
+  image: String
 });
 
 const pantry = new mongoose.model("Pantry", pantrySchema);

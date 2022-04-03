@@ -5,22 +5,26 @@ exports.insertDefaultPantries =
   (fn)=>{
     const pantry = new Pantry({
       name: "Pantry",
-      description: "Things that go on your pantry..."
+      description: "Things that go on your pantry...",
+      image: "images/pantry.png"
     });
 
     const fruits = new Pantry({
       name: "Fruits",
-      description: "Things that go on your fruit bowl..."
+      description: "Things that go on your fruit bowl...",
+      image: "images/fruits.png"
     });
 
     const frozen = new Pantry({
       name: "Frozen",
-      description: "Things that go on your freezes..."
+      description: "Things that go on your freezes...",
+      image: "images/frozen.png"
     });
 
     const hygiene = new Pantry({
       name: "Hygiene",
-      description: "Things that go on your bathroom..."
+      description: "Things that go on your bathroom...",
+      image: "images/bathroom.jpg"
     });
 
     const items = [pantry, fruits, frozen, hygiene];
