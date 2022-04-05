@@ -1,6 +1,7 @@
 const path = require("path");
 const dao = require(path.join(__dirname, "../dao/mongoose"));
 
+
 const mongoose = dao.conn;
 
 const pantrySchema = new mongoose.Schema({

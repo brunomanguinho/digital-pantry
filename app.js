@@ -1,5 +1,7 @@
 let User = require(__dirname + "/models/user");
-const userDAO = require(__dirname + "/dao/userDAO")
+const userDAO = require(__dirname + "/dao/userDAO");
+const itemDAO = require(__dirname + "/dao/itemDAO");
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const session = require("express-session");
@@ -86,11 +88,6 @@ app.get("/pantries", (req, res)=>{
    }
 });
 
-// app.post("/pantries", (req, res)=>{
-//   console.log(req.body);
-//   res.redirect("/pantries/"+req.body.pantryButton);
-// });
-
 app.get("/pantries/:list_name", (req, res)=>{
   console.log(req.query);
   const list = {
@@ -98,8 +95,25 @@ app.get("/pantries/:list_name", (req, res)=>{
     description: req.query.description,
     id: req.query.listID
   }
-  res.render("items", {pantry: list});
+
+  itemDAO.findByPantry(list.id, (docs =>{
+      console.log(docs);
+      res.render("items", {pantry: list, items: docs});
+  }));
+
 });
+
+app.post("/pantries/:list_name", (req, res)=>{
+  pantryID = req.body.pantryId;
+  name = req.body.itemName;
+  quantity = req.body.itemQuantity;
+
+  itemDAO.insertOne(name, quantity, pantryID, item=>{
+
+  });
+
+  res.redirect("/pantries/" + req.params.list_name);
+})
 
 app.listen(3000, () => {
   console.log("Server is listening on port 3000...");

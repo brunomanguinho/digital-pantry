@@ -3,4 +3,21 @@
 <h2><%=pantry.name%></h2>
 <p><%=pantry.description%></p>
 
+<div class="create-item">
+  <form class="add-item" action="/pantries/<%=pantry.name%>" method="post">
+    <input type="text" name="itemName" placeholder="Add a new item...">
+    <input type="number" name="itemQuantity">
+    <input type="hidden" name="pantryId" value="<%=pantry.id%>">
+    <button type="submit" name="add-button"> + </button>
+  </form>
+</div>
+
+<ul>
+  <% items.forEach( item => {%>
+    <li><%=item.name%></li>
+  <%});%>
+</ul>
+
+
+
 <%- include("footer") -%>
