@@ -28,6 +28,9 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+let gPantries = [];
+let gPantriesItems = [];
+
 app.get("/", (req, res) => {
   console.log(req.user)
   if (req.isAuthenticated()){
@@ -82,6 +85,8 @@ app.get("/pantries", (req, res)=>{
       });
     } else{
       res.render("pantries", {user: req.user.username, pantries: req.user.pantries});
+      gPantries = req.user.pantries;
+      console.log("array" + gPantries);
     }
   } else {
     res.redirect("/");
