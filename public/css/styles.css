@@ -73,3 +73,33 @@ body {
   background-color: transparent;
   border: 0px;
 }
+
+.content{
+  align-items: center;
+  margin: 5% 30%;
+  border: 2px solid;
+}
+
+.table-content{
+  width: 100%;
+}
+
+.item-delete{
+  width: 10%
+}
+
+.item-description{
+  width: 60%;
+}
+
+.item-amount{
+  width: 20%;
+}
+
+.item-action{
+  width: 20%
+}
+
+table, th, td{
+  border: 1px solid;
+}

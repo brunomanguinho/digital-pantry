@@ -6,18 +6,29 @@
 <div class="create-item">
   <form class="add-item" action="/pantries/<%=pantry.name%>" method="post">
     <input type="text" name="itemName" placeholder="Add a new item...">
-    <input type="number" name="itemQuantity">
+    <input type="number" name="itemAmount">
     <input type="hidden" name="pantryId" value="<%=pantry.id%>">
     <button type="submit" name="add-button"> + </button>
   </form>
 </div>
 
-<ul>
-  <% items.forEach( item => {%>
-    <li><%=item.name%></li>
-  <%});%>
-</ul>
 
+<div class="content">
+  <table class="table-content">
+    <th class="item-delete"></th>
+    <th class="item-description">Item</th>
+    <th class="item-amount">Amount</th>
+    <th class="item-action"></th>
+    <% items.forEach( item => {%>
+      <tr>
+          <td class="item-delete"></td>
+          <td class="item-description"> <%=item.name%> </td>
+          <td class="item-amount"> <%=item.amount%> </td>
+          <td class="item-action"></td>
+      </tr>
+    <%});%>
 
+  </table>
+</div>
 
 <%- include("footer") -%>

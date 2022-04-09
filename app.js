@@ -1,6 +1,7 @@
 let User = require(__dirname + "/models/user");
+let Pantry = require(__dirname + "/models/pantry");
 const userDAO = require(__dirname + "/dao/userDAO");
-const itemDAO = require(__dirname + "/dao/itemDAO");
+const pantryDAO = require(__dirname + "/dao/pantryDAO");
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -9,6 +10,8 @@ const passport = require("passport");
 const _ = require("lodash");
 
 const app = express();
+
+let curPantry;
 
 app.set("view engine", "ejs");
 
@@ -80,6 +83,7 @@ app.post("/", (req, res) => {
 app.get("/pantries", (req, res)=>{
   if (req.isAuthenticated()){
     if (req.user.pantries.length === 0){
+      console.log("inserting default pantries...");
       userDAO.insertDefaultPantries(req.user, items=>{
           res.render("pantries", {user: req.user.username, pantries: items});
       });
@@ -94,28 +98,41 @@ app.get("/pantries", (req, res)=>{
 });
 
 app.get("/pantries/:list_name", (req, res)=>{
-  console.log(req.query);
-  const list = {
-    name: req.query.pantryButton,
-    description: req.query.description,
-    id: req.query.listID
+  let list;
+  
+  if (Object.keys(req.query).length !== 0){
+    list = {
+      name: req.query.pantryButton,
+      description: req.query.description,
+      id: req.query.listID
+    }
+  }else {
+    list = {
+      name: curPantry.name,
+      description: curPantry.description,
+      id: curPantry._id
+    }
   }
 
-  itemDAO.findByPantry(list.id, (docs =>{
-      console.log(docs);
-      res.render("items", {pantry: list, items: docs});
-  }));
+
+  pantryDAO.findById(list.id, (pantry) => {
+    if (pantry !== null){
+      curPantry = pantry;
+      res.render("items", {pantry: list, items: pantry.items})
+    }else {
+      console.log("could not find a pantry with id: " + list.id);
+    }
+  })
 
 });
 
 app.post("/pantries/:list_name", (req, res)=>{
-  pantryID = req.body.pantryId;
-  name = req.body.itemName;
-  quantity = req.body.itemQuantity;
+  const item = {
+    name: req.body.itemName,
+    amount: req.body.itemAmount
+  }
 
-  itemDAO.insertOne(name, quantity, pantryID, item=>{
-
-  });
+  pantryDAO.insertItem(curPantry, item);
 
   res.redirect("/pantries/" + req.params.list_name);
 })
