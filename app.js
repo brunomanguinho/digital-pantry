@@ -90,7 +90,6 @@ app.get("/pantries", (req, res)=>{
     } else{
       res.render("pantries", {user: req.user.username, pantries: req.user.pantries});
       gPantries = req.user.pantries;
-      console.log("array" + gPantries);
     }
   } else {
     res.redirect("/");
@@ -99,7 +98,7 @@ app.get("/pantries", (req, res)=>{
 
 app.get("/pantries/:list_name", (req, res)=>{
   let list;
-  
+
   if (Object.keys(req.query).length !== 0){
     list = {
       name: req.query.pantryButton,
@@ -135,6 +134,19 @@ app.post("/pantries/:list_name", (req, res)=>{
   pantryDAO.insertItem(curPantry, item);
 
   res.redirect("/pantries/" + req.params.list_name);
+});
+
+app.post("/itemDelete", (req, res) => {
+  pantryDAO.deleteItemById(req.body.pantryID, req.body.itemID);
+
+  res.redirect("/pantries/" + req.body.listName)
+});
+
+app.post("/itemEdit", (req, res)=>{
+  console.log(req.body);
+  pantryDAO.editItemById(req.body.pantryID, req.body.itemID, req.body.itemAmount);
+
+  res.redirect("pantries/" + req.body.listName);
 })
 
 app.listen(3000, () => {

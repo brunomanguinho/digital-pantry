@@ -8,7 +8,7 @@
     <input type="text" name="itemName" placeholder="Add a new item...">
     <input type="number" name="itemAmount">
     <input type="hidden" name="pantryId" value="<%=pantry.id%>">
-    <button type="submit" name="add-button"> + </button>
+    <button type="submit" name="add-button" class="btn btn-success"> Add </button>
   </form>
 </div>
 
@@ -21,10 +21,31 @@
     <th class="item-action"></th>
     <% items.forEach( item => {%>
       <tr>
-          <td class="item-delete"></td>
+          <td class="item-delete">
+            <form action="/itemDelete" method="post">
+                <button type="submit" class="btn btn-danger  btn-sm delete-btn" name="btnDelete"> X </button>
+                <input type="hidden" name="itemID" value="<%= item._id %>">
+                <input type="hidden" name="pantryID" value="<%= pantry.id %>">
+                <input type="hidden" name="listName" value="<%= pantry.name %>">
+            </form>
+          </td>
           <td class="item-description"> <%=item.name%> </td>
-          <td class="item-amount"> <%=item.amount%> </td>
-          <td class="item-action"></td>
+
+          <form class="item-edit" action="/itemEdit" method="post">
+            <input type="hidden" name="pantryID" value="<%= pantry.id %>">
+            <input type="hidden" name="listName" value="<%= pantry.name %>">
+            <input type="hidden" name="itemID" value="<%= item._id %>">
+
+            <td class="item-amount">
+              <button type="button" class="btn btn-danger btn-sm" name="btnDecrease" onclick="decrease"> - </button>
+              <input type="number" class="input-amount" name="itemAmount" id="<%=item._id%>" value="<%=item.amount%>">
+              <button type="button" class="btn btn-primary btn-sm" name="btnIncrease" onclick="increase(<%=item._id%>)"> + </button>
+            </td>
+            <td class="item-action">
+              <button type="submit" name="button" class="btn btn-success btn-sm">OK</button>
+            </td>
+          </form>
+
       </tr>
     <%});%>
 
@@ -32,3 +53,10 @@
 </div>
 
 <%- include("footer") -%>
+<!-- <script type="text/javascript">
+  function decrease(){
+    alert("clicked");
+  //  oldValue = document.getElementbyID(id).value;
+    //document.getElementbyID(id).setAttribute("value", oldValue - 1);
+  }
+</script> -->

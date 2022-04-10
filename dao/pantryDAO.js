@@ -16,6 +16,26 @@ exports.insertItem =
     pantry.save();
   }
 
+exports.deleteItemById =
+  (pantryID, itemID)=>{
+    Pantry.findOneAndUpdate({_id: pantryID}, {$pull: {items: {_id: itemID}}}, (err)=>{
+      if (err){
+        console.log(err);
+      }
+    });
+  }
+
+exports.editItemById =
+  (pantryID, itemID, amount)=>{
+    Pantry.findOne({_id: pantryID}, (err, doc)=>{
+      console.log("editing");
+
+      item = doc.items.id(itemID);
+      item["amount"] = amount;
+      doc.save();
+    });
+  }
+
 exports.insertDefaultPantries =
   (fn)=>{
     const pantry = new Pantry({
