@@ -11,6 +11,8 @@ body {
   background-color: #FFF89A;
   align-items: center;
   text-align: center;
+  color: #FF5F00;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .logo-img{
@@ -57,6 +59,11 @@ body {
 
 .pantries{
   margin: 5% 10%;
+  color: #FF5F00;
+}
+
+.pantries, h3, p{
+  color: #FF5F00;
 }
 
 .pitem{
@@ -77,6 +84,14 @@ body {
 .btn-pantry{
   background-color: transparent;
   border: 0px;
+}
+
+.create-item{
+  padding-top: 3%;
+}
+
+.create-item h2{
+  font-weight: bolder;
 }
 
 .content{
@@ -105,13 +120,22 @@ body {
   width: 20%
 }
 
-/* form .btn{
+table .btn{
   border-radius: 50%;
   text-align: justify;
-} */
+}
 
 .input-amount{
   width: 40%;
+}
+
+.create-item .input-amount{
+  width: 5%;
+}
+
+#footer{
+  background-color: #D9CE3F;
+  
 }
 
 table, th, td{

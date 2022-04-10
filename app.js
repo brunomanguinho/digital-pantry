@@ -35,7 +35,6 @@ let gPantries = [];
 let gPantriesItems = [];
 
 app.get("/", (req, res) => {
-  console.log(req.user)
   if (req.isAuthenticated()){
     res.redirect("/pantries");
   }else res.render("index");
@@ -47,8 +46,6 @@ app.post("/", (req, res) => {
 
   userDAO.findUser(_userName, (foundUser)=>{
     if (foundUser === null){
-      console.log("user not found...registering...");
-
       User.register({username: _userName}, _password, (err, user)=>{
         if (err){
           console.log(err);
@@ -61,7 +58,6 @@ app.post("/", (req, res) => {
 
       });
     } else {
-      console.log("trying to log in...");
       const user = new User({
         username: _userName,
         password: _password
@@ -83,7 +79,6 @@ app.post("/", (req, res) => {
 app.get("/pantries", (req, res)=>{
   if (req.isAuthenticated()){
     if (req.user.pantries.length === 0){
-      console.log("inserting default pantries...");
       userDAO.insertDefaultPantries(req.user, items=>{
           res.render("pantries", {user: req.user.username, pantries: items});
       });
@@ -98,21 +93,22 @@ app.get("/pantries", (req, res)=>{
 
 app.get("/pantries/:list_name", (req, res)=>{
   let list;
-
+  console.log(req.query);
   if (Object.keys(req.query).length !== 0){
     list = {
       name: req.query.pantryButton,
       description: req.query.description,
-      id: req.query.listID
+      id: req.query.listID,
+      image: req.query.image
     }
   }else {
     list = {
       name: curPantry.name,
       description: curPantry.description,
-      id: curPantry._id
+      id: curPantry._id,
+      image: curPantry.image
     }
   }
-
 
   pantryDAO.findById(list.id, (pantry) => {
     if (pantry !== null){
@@ -143,7 +139,6 @@ app.post("/itemDelete", (req, res) => {
 });
 
 app.post("/itemEdit", (req, res)=>{
-  console.log(req.body);
   pantryDAO.editItemById(req.body.pantryID, req.body.itemID, req.body.itemAmount);
 
   res.redirect("pantries/" + req.body.listName);

@@ -1,14 +1,16 @@
 <%- include("header") -%>
 
-<h2><%=pantry.name%></h2>
-<p><%=pantry.description%></p>
 
 <div class="create-item">
+  <img class="mb-4 logo-img" src="/<%=pantry.image%>" alt="" width="72" height="57" />
+  <h2><%=pantry.name%></h2>
+  <p><%=pantry.description%></p>
+
   <form class="add-item" action="/pantries/<%=pantry.name%>" method="post">
     <input type="text" name="itemName" placeholder="Add a new item...">
-    <input type="number" name="itemAmount">
+    <input type="number" name="itemAmount" class="input-amount">
     <input type="hidden" name="pantryId" value="<%=pantry.id%>">
-    <button type="submit" name="add-button" class="btn btn-success"> Add </button>
+    <button type="submit" name="add-button" class="btn btn-success btn-sm"> Add </button>
   </form>
 </div>
 
@@ -37,9 +39,9 @@
             <input type="hidden" name="itemID" value="<%= item._id %>">
 
             <td class="item-amount">
-              <button type="button" class="btn btn-danger btn-sm" name="btnDecrease" onclick="decrease"> - </button>
+              <!-- <button type="button" class="btn btn-danger btn-sm" name="btnDecrease" onclick="decrease"> - </button> -->
               <input type="number" class="input-amount" name="itemAmount" id="<%=item._id%>" value="<%=item.amount%>">
-              <button type="button" class="btn btn-primary btn-sm" name="btnIncrease" onclick="increase(<%=item._id%>)"> + </button>
+              <!-- <button type="button" class="btn btn-primary btn-sm" name="btnIncrease" onclick="increase(<%=item._id%>)"> + </button> -->
             </td>
             <td class="item-action">
               <button type="submit" name="button" class="btn btn-success btn-sm">OK</button>
@@ -53,10 +55,3 @@
 </div>
 
 <%- include("footer") -%>
-<!-- <script type="text/javascript">
-  function decrease(){
-    alert("clicked");
-  //  oldValue = document.getElementbyID(id).value;
-    //document.getElementbyID(id).setAttribute("value", oldValue - 1);
-  }
-</script> -->
